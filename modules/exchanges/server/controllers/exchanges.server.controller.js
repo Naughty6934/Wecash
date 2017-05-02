@@ -1,0 +1,117 @@
+'use strict';
+
+/**
+ * Module dependencies.
+ */
+var path = require('path'),
+  mongoose = require('mongoose'),
+  Exchange = mongoose.model('Exchange'),
+  errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
+  _ = require('lodash');
+
+/**
+ * Create a Exchange
+ */
+exports.create = function(req, res) {
+  var exchange = new Exchange(req.body);
+  exchange.user = req.user;
+
+  exchange.save(function(err) {
+    if (err) {
+      return res.status(400).send({
+        message: errorHandler.getErrorMessage(err)
+      });
+    } else {
+      res.jsonp(exchange);
+    }
+  });
+};
+
+/**
+ * Show the current Exchange
+ */
+exports.read = function(req, res) {
+  // convert mongoose document to JSON
+  var exchange = req.exchange ? req.exchange.toJSON() : {};
+
+  // Add a custom field to the Article, for determining if the current User is the "owner".
+  // NOTE: This field is NOT persisted to the database, since it doesn't exist in the Article model.
+  exchange.isCurrentUserOwner = req.user && exchange.user && exchange.user._id.toString() === req.user._id.toString();
+
+  res.jsonp(exchange);
+};
+
+/**
+ * Update a Exchange
+ */
+exports.update = function(req, res) {
+  var exchange = req.exchange;
+
+  exchange = _.extend(exchange, req.body);
+
+  exchange.save(function(err) {
+    if (err) {
+      return res.status(400).send({
+        message: errorHandler.getErrorMessage(err)
+      });
+    } else {
+      res.jsonp(exchange);
+    }
+  });
+};
+
+/**
+ * Delete an Exchange
+ */
+exports.delete = function(req, res) {
+  var exchange = req.exchange;
+
+  exchange.remove(function(err) {
+    if (err) {
+      return res.status(400).send({
+        message: errorHandler.getErrorMessage(err)
+      });
+    } else {
+      res.jsonp(exchange);
+    }
+  });
+};
+
+/**
+ * List of Exchanges
+ */
+exports.list = function(req, res) {
+  Exchange.find().sort('-created').populate('user', 'displayName').exec(function(err, exchanges) {
+    if (err) {
+      return res.status(400).send({
+        message: errorHandler.getErrorMessage(err)
+      });
+    } else {
+      res.jsonp(exchanges);
+    }
+  });
+};
+
+/**
+ * Exchange middleware
+ */
+exports.exchangeByID = function(req, res, next, id) {
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).send({
+      message: 'Exchange is invalid'
+    });
+  }
+
+  Exchange.findById(id).populate('user', 'displayName').exec(function (err, exchange) {
+    if (err) {
+      return next(err);
+    } else if (!exchange) {
+      return res.status(404).send({
+        message: 'No Exchange with that identifier has been found'
+      });
+    }
+    req.exchange = exchange;
+    next();
+  });
+};
