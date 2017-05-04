@@ -44,6 +44,14 @@ var UserSchema = new Schema({
     type: String,
     trim: true
   },
+  countryCode: {
+    type: String,
+    required: 'Please fill in a username'
+  },
+  contact: {
+    type: Number,
+    required: 'Please fill in a contact'
+  },
   email: {
     type: String,
     unique: true,
