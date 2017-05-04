@@ -6,6 +6,8 @@
 var path = require('path'),
   mongoose = require('mongoose'),
   Exchange = mongoose.model('Exchange'),
+  request = require('request'),
+  exchangeUrl = 'http://api.fixer.io/latest?base=',
   errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
   _ = require('lodash');
 
@@ -39,6 +41,10 @@ exports.read = function(req, res) {
   exchange.isCurrentUserOwner = req.user && exchange.user && exchange.user._id.toString() === req.user._id.toString();
 
   res.jsonp(exchange);
+};
+
+exports.exchangesrate = function (req, res) {
+  res.jsonp(req.exchangesrate);
 };
 
 /**
@@ -113,5 +119,25 @@ exports.exchangeByID = function(req, res, next, id) {
     }
     req.exchange = exchange;
     next();
+  });
+};
+
+exports.exchangeByBase = function (req, res, next, base) {
+
+  request({
+    url: exchangeUrl + base,
+    method: 'GET',
+  }, function (error, response, body) {
+    if (error) {
+      return next(error);
+    } else if (response.body.error) {
+      return res.status(404).send({
+        message: response.body.error
+      });
+    } else {
+      //res.jsonp(JSON.parse(response.body));
+      req.exchangesrate = JSON.parse(response.body);
+      next();
+    }
   });
 };

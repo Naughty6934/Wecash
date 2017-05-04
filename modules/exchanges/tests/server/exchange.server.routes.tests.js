@@ -562,6 +562,40 @@ describe('Exchange CRUD tests', function () {
     });
   });
 
+  it('should be able to Get Exchange Base', function (done) {
+    agent.post('/api/auth/signin')
+      .send(credentials)
+      .expect(200)
+      .end(function (signinErr, signinRes) {
+        // Handle signin error
+        if (signinErr) {
+          return done(signinErr);
+        }
+        var exchangebase = 'USD';
+
+        // Get the Base
+        var userId = user.id;
+        // Save a new Base
+        agent.get('/api/exchangesrate/' + exchangebase)
+          .end(function (exchangesGetErr, exchangesGetRes) {
+            // Handle Exchanges save error
+            if (exchangesGetErr) {
+              return done(exchangesGetErr);
+            }
+
+            // Get Exchanges list
+            var exchanges = exchangesGetRes.body;
+
+            // Set assertions
+            (exchanges.base).should.equal(exchangebase);
+            // (exchanges[0].currency_from).should.match('Exchange currency_from');
+
+            // Call the assertion callback
+            done();
+          });
+      });
+  });
+
   afterEach(function (done) {
     User.remove().exec(function () {
       Exchange.remove().exec(done);
