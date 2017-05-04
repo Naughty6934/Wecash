@@ -40,6 +40,7 @@ describe('User CRUD tests', function () {
       countryCode: '+66',
       contact: '9876567432',
       email: 'test@test.com',
+      base:'THB',
       username: credentials.username,
       password: credentials.password,
       provider: 'local'

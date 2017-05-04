@@ -25,6 +25,7 @@ describe('User Model Unit Tests:', function () {
       countryCode: '+66',
       contact: 9876567432,
       email: 'test@test.com',
+      base:'THB',
       username: 'username',
       password: 'M3@n.jsI$Aw3$0m3',
       provider: 'local'
@@ -38,6 +39,7 @@ describe('User Model Unit Tests:', function () {
       countryCode: '+66',
       contact: '9876567432',
       email: 'test3@test.com',
+      base:'THB',
       username: 'different_username',
       password: 'Different_Password1!',
       provider: 'local'
