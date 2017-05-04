@@ -23,6 +23,8 @@ describe('Article Model Unit Tests:', function () {
       firstName: 'Full',
       lastName: 'Name',
       displayName: 'Full Name',
+      countryCode:'+66',
+      contact:9876567432,
       email: 'test@test.com',
       username: 'username',
       password: 'M3@n.jsI$Aw3$0m3'

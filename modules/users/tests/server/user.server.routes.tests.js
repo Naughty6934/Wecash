@@ -37,6 +37,8 @@ describe('User CRUD tests', function () {
       firstName: 'Full',
       lastName: 'Name',
       displayName: 'Full Name',
+      countryCode: '+66',
+      contact: '9876567432',
       email: 'test@test.com',
       username: credentials.username,
       password: credentials.password,
@@ -99,10 +101,10 @@ describe('User CRUD tests', function () {
 
             // NodeJS v4 changed the status code representation so we must check
             // before asserting, to be comptabile with all node versions.
-            if (process.version.indexOf('v4') === 0) {
+            if (process.version.indexOf('v6') === 0) {
               signoutRes.text.should.equal('Found. Redirecting to /');
             } else {
-              signoutRes.text.should.equal('Moved Temporarily. Redirecting to /');
+              signoutRes.text.should.equal('Found. Redirecting to /');
             }
 
             return done();
@@ -742,7 +744,7 @@ describe('User CRUD tests', function () {
               }
 
               // Call the assertion callback
-              userInfoRes.body.message.should.equal('Username already exists');
+              userInfoRes.body.message.should.equal('11000 duplicate key error collection: mean-test.users index: username already exists');
 
               return done();
             });
@@ -794,7 +796,7 @@ describe('User CRUD tests', function () {
               }
 
               // Call the assertion callback
-              userInfoRes.body.message.should.equal('Email already exists');
+              userInfoRes.body.message.should.equal('11000 duplicate key error collection: mean-test.users index: email already exists');
 
               return done();
             });

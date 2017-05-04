@@ -38,6 +38,8 @@ describe('Article CRUD tests', function () {
       firstName: 'Full',
       lastName: 'Name',
       displayName: 'Full Name',
+      countryCode:'+66',
+      contact:9876567432,
       email: 'test@test.com',
       username: credentials.username,
       password: credentials.password,
