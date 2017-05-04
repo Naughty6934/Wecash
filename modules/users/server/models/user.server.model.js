@@ -44,6 +44,9 @@ var UserSchema = new Schema({
     type: String,
     trim: true
   },
+  homeTown: {
+    type: String 
+  },
   countryCode: {
     type: String
     

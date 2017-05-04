@@ -26,6 +26,12 @@
             <p class="help-block error-text" ng-message="email">Email address is invalid.</p>
           </div>
         </div>
+        <!--homeTown-->
+        <div class="form-group" show-errors>
+          <label for="homeTown">HomeTown</label>
+          <input type="text" id="homeTown" name="homeTown" class="form-control" ng-model="credentials.homeTown" placeholder="HomeTown" lowercase required>
+        </div>
+        <!---->
         <!--countryCode-->
         <div class="form-group" show-errors>
           <label for="countryCode">Country Code</label>
