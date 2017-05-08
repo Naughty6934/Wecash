@@ -23,7 +23,11 @@ module.exports = function (app) {
   app.route('/api/auth/facebook').get(users.oauthCall('facebook', {
     scope: ['email']
   }));
+  // สร้างเพิ่ม Mam///
+  app.route('/api/auth/facebook').post(users.oauthCallbackionic('facebook'));
+//////////////////
   app.route('/api/auth/facebook/callback').get(users.oauthCallback('facebook'));
+  
 
   // Setting the twitter oauth routes
   app.route('/api/auth/twitter').get(users.oauthCall('twitter'));

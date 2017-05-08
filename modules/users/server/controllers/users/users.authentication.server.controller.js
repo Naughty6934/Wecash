@@ -118,12 +118,50 @@ exports.oauthCallback = function (strategy) {
         if (err) {
           return res.redirect('/authentication/signin');
         }
-
-        return res.redirect(redirectURL || sessionRedirectURL || '/');
+        return res.redirect(typeof redirectURL === 'string' ? redirectURL : sessionRedirectURL || '/');
+        // return res.redirect(redirectURL || sessionRedirectURL || '/');
       });
     })(req, res, next);
   };
 };
+
+// สร้างเพิ่มfacebookcallbackionic
+exports.oauthCallbackionic = function (strategy) {
+  return function (req, res, next) {
+    // เพิ่ม
+    req.query.code = req.body.code;
+    /////////////////////
+    // Pop redirect URL from session
+    var sessionRedirectURL = req.session.redirect_to;
+    delete req.session.redirect_to;
+// เพิ่ม{callbackURL : 'http://192.168.20.128:8102/'},res.jsonp({message : 'authenticate fail'});  ,  res.jsonp(user);
+    passport.authenticate(strategy,{callbackURL : 'http://192.168.20.128:8100/'}, function (err, user, redirectURL) {
+      if (err) {
+        res.jsonp({
+          message : 'authenticate fail'
+        });
+      }
+      if (!user) {
+        res.jsonp({
+          message : 'user fail'
+        });
+      }
+      req.login(user, function (err) {
+        if (err) {
+          res.jsonp({
+          message : 'user fail'
+        });
+      }
+      res.jsonp(user);
+        // return res.redirect(typeof redirectURL === 'string' ? redirectURL : sessionRedirectURL || '/');
+        // return res.redirect(redirectURL || sessionRedirectURL || '/');
+      });
+    })(req, res, next);
+  };
+};
+//////////////////////////////////////
+
+
 
 /**
  * Helper function to save or update a OAuth user profile

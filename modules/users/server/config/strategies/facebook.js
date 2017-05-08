@@ -27,6 +27,7 @@ module.exports = function (config) {
       firstName: profile.name.givenName,
       lastName: profile.name.familyName,
       displayName: profile.displayName,
+      // หากไม่มีemailจะไม่สามารถเข้าใช้งานได้  เนื่องจากเราถามถึงemail
       email: profile.emails ? profile.emails[0].value : undefined,
       username: profile.username || generateUsername(profile),
       profileImageURL: (profile.id) ? '//graph.facebook.com/' + profile.id + '/picture?type=large' : undefined,
